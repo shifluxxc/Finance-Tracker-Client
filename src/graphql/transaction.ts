@@ -52,8 +52,8 @@ mutation AddTransaction($amount: Float!, $description: String!, $categoryId: ID!
 `
 
 export const editTransaction = gql`
-mutation EditTransaction($editTransactionId: ID!, $amount: Float, $description: String, $categoryId: ID) {
-  editTransaction(id: $editTransactionId, amount: $amount, description: $description, categoryId: $categoryId) {
+mutation EditTransaction($id: ID!, $amount: Float, $description: String, $categoryId: ID) {
+  editTransaction(id: $id, amount: $amount, description: $description, categoryId: $categoryId) {
     amount
     category {
       name
@@ -68,7 +68,7 @@ mutation EditTransaction($editTransactionId: ID!, $amount: Float, $description: 
 `
 
 export const deleteTransaction = gql`
-mutation DeleteTransaction($deleteTransactionId: ID!) {
-  deleteTransaction(id: $deleteTransactionId)
+mutation DeleteTransaction($id: ID!) {
+  deleteTransaction(id: $id)
 }
 `
