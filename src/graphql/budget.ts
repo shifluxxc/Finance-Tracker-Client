@@ -46,8 +46,8 @@ mutation Mutation($categoryId: ID!, $amount: Float!) {
 `
 
 export const editBudget = gql`
-mutation EditBudget($editBudgetId: ID!, $amount: Float!) {
-  editBudget(id: $editBudgetId, amount: $amount) {
+mutation EditBudget($id: ID!, $amount: Float!) {
+  editBudget(id: $id, amount: $amount) {
     amount
     category {
       name

@@ -1,7 +1,7 @@
 import { Category, Budget } from "@/context/FinanceContext";
 import graphqlClient, { fetcher } from "@/gqlClient";
 import { addBudget, categoriesQuery, categoryWiseBudgetPercentageQuery, editBudget, monthWiseBudgetQuery, budgetsQuery } from "@/graphql/budget";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCategories = () => {
     return useQuery<Category[]>({
@@ -38,20 +38,35 @@ export const useBudgets = () => {
   });
 };
   
-export const useAddBudget = () =>
-  useMutation({
+export const useAddBudget = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
     mutationFn: async (input: { amount: number; categoryId: string }) => {
       const query = addBudget; 
       return graphqlClient.request(query, input);
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['budgets'] });
+      queryClient.invalidateQueries({ queryKey: ['categoryWiseBudgetPercentage'] });
+      queryClient.invalidateQueries({ queryKey: ['monthWiseBudget'] });
+      queryClient.invalidateQueries({ queryKey: ['recentBudgets'] }); // Invalidate recent budgets as well
+    },
   });
+}
 
-  export const useEditBudget = () =>
-    useMutation({
+  export const useEditBudget = () =>{
+  const queryClient = useQueryClient();
+
+    return useMutation({
       mutationFn: async (input: { id: string; amount?: number; month?: number; categoryId?: string }) => {
         const query = editBudget;
         return graphqlClient.request(query, input);
       },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['budgets'] });
+        queryClient.invalidateQueries({ queryKey: ['categoryWiseBudgetPercentage'] });
+        queryClient.invalidateQueries({ queryKey: ['monthWiseBudget'] });
+        queryClient.invalidateQueries({ queryKey: ['recentBudgets'] }); // Invalidate recent budgets as well
+      },
     });
-
-
+  }
