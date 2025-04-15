@@ -1,7 +1,8 @@
 import { Transaction } from "@/context/FinanceContext";
 import graphqlClient, { fetcher } from "@/gqlClient";
 import { addTransacton, categoryExpensePercentageQuery, deleteTransaction, editTransaction, monthWiseExpensesQuery, transactionsQuery } from "@/graphql/transaction";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 
 
 export const useCategoryExpensePercentage = () => {
@@ -28,27 +29,53 @@ export const useMonthWiseExpenses = () => {
 };
   
 
-export const useAddTransaction = () =>
-  useMutation({
+export const useAddTransaction = () => {
+const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: async (input: { amount: number; description: string; categoryId: string }) => {
       const query = addTransacton;
       return graphqlClient.request(query, input);
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['categoryExpensePercentage'] });
+      queryClient.invalidateQueries({ queryKey: ['monthWiseExpenses'] });
+    },
   });
+}
 
-  export const useEditTransaction = () =>
-    useMutation({
+  export const useEditTransaction = () =>{
+const queryClient = useQueryClient();
+
+    return useMutation({
       mutationFn: async (input: { id: string; amount?: number; description?: string; categoryId?: string }) => {
         const query =editTransaction ;
         return graphqlClient.request(query, input);
       },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        queryClient.invalidateQueries({ queryKey: ['categoryExpensePercentage'] });
+        queryClient.invalidateQueries({ queryKey: ['monthWiseExpenses'] });
+      },
     });
+    
+  }
+    
 
 
-    export const useDeleteTransaction = () =>
-      useMutation({
+    export const useDeleteTransaction = () =>{
+const queryClient = useQueryClient();
+
+      return useMutation({
         mutationFn: async (id: string) => {
           const query = deleteTransaction;
           return graphqlClient.request(query, { id });
         },
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['transactions'] });
+          queryClient.invalidateQueries({ queryKey: ['categoryExpensePercentage'] });
+          queryClient.invalidateQueries({ queryKey: ['monthWiseExpenses'] });
+        },
       });
+    }
