@@ -50,7 +50,7 @@ const CategoryChart: React.FC<{ title?: string }> = ({ title = "Spending by Cate
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white p-2 border rounded-md shadow-md">
+        <div className="bg-gray-500 p-2 border rounded-md shadow-md">
           <p className="font-medium">{payload[0].name}</p>
           <p className="text-sm">${payload[0].value.toFixed(2)}</p>
         </div>
