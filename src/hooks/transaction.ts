@@ -33,7 +33,7 @@ export const useAddTransaction = () => {
 const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: { amount: number; description: string; categoryId: string }) => {
+    mutationFn: async (input: { amount: number; description: string; categoryId: string; year: number; month: number }) => {
       const query = addTransacton;
       return graphqlClient.request(query, input);
     },
@@ -49,7 +49,7 @@ const queryClient = useQueryClient();
 const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: async (input: { id: string; amount?: number; description?: string; categoryId?: string }) => {
+      mutationFn: async (input: { editTransactionId: string; amount?: number; description?: string; categoryId?: string; year?: number; month?: number }) => {
         const query =editTransaction ;
         return graphqlClient.request(query, input);
       },
@@ -68,9 +68,9 @@ const queryClient = useQueryClient();
 const queryClient = useQueryClient();
 
       return useMutation({
-        mutationFn: async (id: string) => {
+        mutationFn: async (deleteTransactionId : string) => {
           const query = deleteTransaction;
-          return graphqlClient.request(query, { id });
+          return graphqlClient.request(query, { deleteTransactionId });
         },
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['transactions'] });

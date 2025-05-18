@@ -41,7 +41,7 @@ export const useBudgets = () => {
 export const useAddBudget = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { amount: number; categoryId: string }) => {
+    mutationFn: async (input: { amount: number; categoryId: string;  year: number; month: number}) => {
       const query = addBudget; 
       return graphqlClient.request(query, input);
     },
@@ -58,7 +58,7 @@ export const useAddBudget = () => {
   const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: async (input: { id: string; amount?: number; month?: number; categoryId?: string }) => {
+      mutationFn: async (input: { editBudgetId: string; amount?: number; month?: number; categoryId?: string;  year?: number}) => {
         const query = editBudget;
         return graphqlClient.request(query, input);
       },

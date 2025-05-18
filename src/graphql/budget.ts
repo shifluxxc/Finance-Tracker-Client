@@ -31,30 +31,28 @@ export const monthWiseBudgetQuery = gql`
 
 
 export const addBudget = gql`
-mutation Mutation($categoryId: ID!, $amount: Float!) {
-  addBudget(categoryId: $categoryId, amount: $amount) {
+mutation AddBudget($categoryId: ID!, $amount: Float!, $year: Int!, $month: Int!) {
+  addBudget(categoryId: $categoryId, amount: $amount, year: $year, month: $month) {
     amount
     category {
-      id
       name
     }
+    id
     month
     year
-    id
   }
 }
 `
 
 export const editBudget = gql`
-mutation EditBudget($id: ID!, $amount: Float!) {
-  editBudget(id: $id, amount: $amount) {
+mutation EditBudget($editBudgetId: ID!, $amount: Float, $year: Int, $month: Int, $categoryId: ID) {
+  editBudget(id: $editBudgetId, amount: $amount, year: $year, month: $month, categoryId: $categoryId) {
     amount
     category {
       name
-      id
     }
-    month
     id
+    month
     year
   }
 }

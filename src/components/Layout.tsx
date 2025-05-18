@@ -51,10 +51,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
           <nav className="flex-1 space-y-1 px-2">
             <NavItem
-              href="/"
+              href="/dashboard"
               icon={<LayoutDashboard className="h-5 w-5" />}
               title="Dashboard"
-              isActive={location.pathname === "/"}
+              isActive={location.pathname === "/dashboard"}
             />
             <NavItem
               href="/transactions"

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useFinance } from "@/context/FinanceContext";
 import { useForm } from "react-hook-form";
@@ -78,10 +77,11 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ budgetId, onComplete }) => {
     if (budgetId) {
       const budget = budgets.find((b) => b.id === budgetId);
       if (budget) {
+        const monthStr = `${budget.year}-${String(budget.month).padStart(2, "0")}`;
         form.reset({
           categoryId: budget.categoryId,
           amount: budget.amount,
-
+          month: monthStr,
         });
       }
     }
@@ -89,11 +89,17 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ budgetId, onComplete }) => {
 
   const onSubmit = (data: FormValues) => {
     try {
-      // Check if a budget already exists for this category and month
-      console.log(data); 
+      // Parse year and month from the YYYY-MM string
+      const [yearStr, monthStr] = data.month.split("-");
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+
+      // Check if a budget already exists for this category and month/year
       const existingBudget = budgets.find(
         (b) =>
           b.categoryId === data.categoryId &&
+          b.year === year &&
+          b.month === month &&
           b.id !== budgetId
       );
 
@@ -107,8 +113,12 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ budgetId, onComplete }) => {
       }
 
       if (budgetId) {
-        updateBudget(budgetId, {
+        updateBudget({
+          id: budgetId,
           amount: data.amount,
+          categoryId: data.categoryId,
+          month, 
+          year,
         });
         toast({
           title: "Budget updated",
@@ -118,6 +128,8 @@ const BudgetForm: React.FC<BudgetFormProps> = ({ budgetId, onComplete }) => {
         addBudget({
           categoryId: data.categoryId,
           amount: data.amount,
+          year,
+          month,
         });
         toast({
           title: "Budget added",

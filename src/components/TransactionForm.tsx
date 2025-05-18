@@ -87,14 +87,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const onSubmit = async (data: FormValues) => {
     try
     {
-      console.log(data); 
+      console.log(data.date.getMonth() +1); 
       console.log(transactionId); 
       if (transactionId) {
-        updateTransaction(transactionId , {
-          amount: data.amount,
-          description: data.description, 
-          categoryId : data.categoryId
-        });
+       updateTransaction({
+  id: transactionId,
+  amount: data.amount,
+  description: data.description, 
+  categoryId: data.categoryId,
+  month: data.date.getMonth() + 1,
+  year: data.date.getFullYear(),
+});;
         toast({
           title: "Transaction updated",
           description: "Your transaction has been updated successfully.",
@@ -103,7 +106,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         await addTransaction({
           amount: data.amount,
           description: data.description,
-          categoryId : data.categoryId,
+          categoryId: data.categoryId,
+          month: data.date.getMonth() + 1,
+          year: data.date.getFullYear(),
         });
         toast({
           title: "Transaction added",

@@ -36,12 +36,11 @@ export const transactionsQuery = gql`
 `;
 
 export const addTransacton = gql`
-mutation AddTransaction($amount: Float!, $description: String!, $categoryId: ID!) {
-  addTransaction(amount: $amount, description: $description, categoryId: $categoryId) {
+mutation AddTransaction($amount: Float!, $description: String!, $categoryId: ID!, $year: Int!, $month: Int!) {
+  addTransaction(amount: $amount, description: $description, categoryId: $categoryId, year: $year, month: $month) {
     amount
     category {
       name
-      id
     }
     description
     id
@@ -52,15 +51,14 @@ mutation AddTransaction($amount: Float!, $description: String!, $categoryId: ID!
 `
 
 export const editTransaction = gql`
-mutation EditTransaction($id: ID!, $amount: Float, $description: String, $categoryId: ID) {
-  editTransaction(id: $id, amount: $amount, description: $description, categoryId: $categoryId) {
+mutation EditTransaction($amount: Float, $editTransactionId: ID!, $description: String, $categoryId: ID, $year: Int, $month: Int) {
+  editTransaction(amount: $amount, id: $editTransactionId, description: $description, categoryId: $categoryId, year: $year, month: $month) {
     amount
     category {
       name
-      id
     }
-    description
     id
+    description
     month
     year
   }
@@ -68,7 +66,7 @@ mutation EditTransaction($id: ID!, $amount: Float, $description: String, $catego
 `
 
 export const deleteTransaction = gql`
-mutation DeleteTransaction($id: ID!) {
-  deleteTransaction(id: $id)
+mutation DeleteTransaction($deleteTransactionId: ID!) {
+  deleteTransaction(id: $deleteTransactionId)
 }
 `

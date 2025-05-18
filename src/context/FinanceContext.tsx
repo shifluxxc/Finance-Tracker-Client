@@ -31,13 +31,18 @@ export type Transaction = {
 export type AddTransaction = {
   amount: number;
   description: string;
-  categoryId: string ;
+  categoryId: string;
+  year: number;
+  month: number;
 };
 
 export type EditTransaction = {
+  id : string;
   amount: number;
   description: string;
-  categoryId: string ;
+  categoryId: string;
+  year: number; 
+  month: number 
 };
 
 export type Budget = {
@@ -52,10 +57,16 @@ export type Budget = {
 export type AddBudget = {
   categoryId: string;
   amount: number;
+  year: number;
+  month: number;
 };
 
 export type EditBudget = {
-  amount : number
+  id : string;
+  amount: number
+  year: number
+  month: number;
+  categoryId: string;
 };
 
 type FinanceContextType = {
@@ -63,11 +74,11 @@ type FinanceContextType = {
   categories: Category[];
   budgets: Budget[];
   addTransaction: (transaction: Omit<AddTransaction, "id">) => void;
-  updateTransaction: (id : string , transaction: Omit<EditTransaction, "id">) => void;
-  deleteTransaction: (id: string) => void;
+  updateTransaction: (transaction: Omit<EditTransaction, "">) => void;
+  deleteTransaction: (deleteTransactionId : string ) => void;
   getCategory: (id: string) => Category | undefined;
   addBudget: (budget: Omit<AddBudget, "id">) => void;
-  updateBudget: (id : string , budget: Omit<EditBudget, "id">) => void;
+  updateBudget: ( budget: Omit<EditBudget, "">) => void;
   getCategoryTotals: () => { categoryId: string; total: number }[];
   getMonthlyExpenses: () => { month: string; total: number }[];
   getMonthlyCategoryExpenses: (categoryId: string) => { month: string; total: number }[];
@@ -106,20 +117,23 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       amount: transaction.amount,
       description: transaction.description,
       categoryId: transaction.categoryId,
+      year: transaction.year,
+      month: transaction.month,
     });
   };
 
-  const updateTransaction = (id: string , transaction: Omit<EditTransaction, "id">) => {
+  const updateTransaction = ( transaction: Omit<EditTransaction, "">) => {
     updateTransactionMutation({
-      id,
+      editTransactionId: transaction.id,
+      year: transaction.year,
       amount: transaction.amount,
       description: transaction.description,
       categoryId: transaction.categoryId,
     });
   };
   // console.log(transactions);
-  const deleteTransaction = (id: string) => {
-    deleteTransactionMutation(id);
+  const deleteTransaction = (deleteTransactionId: string) => {
+    deleteTransactionMutation( deleteTransactionId );
   };
   // console.log(categories); 
   const getCategory = (id: string) => categories.find((c) => c.id === id);
@@ -128,13 +142,18 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     addBudgetMutation({
       categoryId: budget.categoryId,
       amount: budget.amount,
+      year: budget.year,
+      month: budget.month,
     });
   };
 
-  const updateBudget = (id: string, budget: Omit<EditBudget, "id">) => {
+  const updateBudget = ( budget: Omit<EditBudget, "">) => {
     updateBudgetMutation({
-      id,
+      editBudgetId : budget.id,
       amount: budget.amount,
+      year: budget.year,
+      month: budget.month,
+      categoryId: budget.categoryId,
     });
   };
 
